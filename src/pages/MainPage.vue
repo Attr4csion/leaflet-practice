@@ -1,25 +1,21 @@
 <template>
-  <!-- <div class="flex flex-col h-screen max-h-screen">
-    <div class="flex justify-between relative px-4 pt-8 pb-32"></div>
-
-    <div class="w-full max-w-screen-sm">
-      <h1 class="text-center text-3xl pb-4">ID address tracker</h1>
-      <div class="flex">
-        <input
-          class="flex-1 py-3 px-2 rounded-tl-md rounded-bl-md focus:outline-none"
-          type="text"
-          placeholder="Search for IP"
-        />
-      </div>
-    </div>
-  </div> -->
+  <div class="flex gap-10">
+    <div class="flex flex-wrap gap-10">
+    <el-card v-for="s in sight" :key="s.id">
+    <img :src="s.image">
+    <p>{{ s.name }}</p>
+  </el-card>
+  </div>
   <div>
     <TheMap></TheMap>
   </div>
+  </div>
+
 </template>
 
 <script setup lang="ts">
 import TheMap from '../components/TheMap.vue'
+import sight from '@/assets/sight.json'
 </script>
 
 <style scoped></style>
