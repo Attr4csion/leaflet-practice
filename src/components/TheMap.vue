@@ -5,19 +5,22 @@
 <script setup lang="ts">
 import leaflet from 'leaflet';
 import { onMounted } from 'vue';
-// import { useGeolocation } from '@vueuse/core';
-import {  nearbyMarkers } from '../Map';
+import { nearbyMarkers } from '../Map';
+import { useRoute } from 'vue-router';
+import sight from '@/assets/sight.json';
 
 let map: leaflet.Map;
-// let userGeoMarker: leaflet.Marker;
 
 onMounted(() => {
+  const { params } = useRoute();
+  const name = sight.find((el) => el.id == params.id)?.name;
+
   let a = localStorage.getItem('coords');
   let coord = JSON.parse(a);
 
   map = leaflet.map('map').setView([coord.latitude, coord.longitude], 13);
 
-  leaflet.marker([coord.latitude, coord.longitude]).addTo(map).bindPopup('lol');
+  leaflet.marker([coord.latitude, coord.longitude]).addTo(map).bindPopup(`${name}`);
 
   leaflet
     .tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {

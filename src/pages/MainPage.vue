@@ -1,16 +1,24 @@
 <template>
+  <!-- <div class="flex gap-5 m-10 ">
+    <input
+      v-model="filterOfName"
+      placeholder="Введите название"
+      class="w-[200px] outline-none border-black border-2 border-solid rounded p-2"
+    />
+    <el-button @click="handleFilterSights" size="large">Найти</el-button>
+  </div> -->
   <div class="flex gap-10 m-auto w-[1400px]">
     <el-scrollbar height="900px">
       <div class="flex flex-wrap gap-10 w-90">
         <el-card
-          v-for="s in sight"
+          v-for="s in items"
           :key="s.id"
           class="w-[250px] h-[300px]"
           @click="setCoords(s)"
         >
           <img
             :src="s.image"
-            class="h-[138px]"
+            class="image"
           />
           <p>{{ s.name }}</p>
         </el-card>
@@ -24,6 +32,8 @@ import sight from '@/assets/sight.json';
 import router from '@/router';
 import { useSightsStore } from '@/sights-store';
 
+const items = ref(sight);
+
 const setCoords = (s) => {
   let c = JSON.stringify(s.coords);
   localStorage.setItem('coords', c);
@@ -31,11 +41,17 @@ const setCoords = (s) => {
   router.push(`/sights/${s.id}`);
 };
 const store = useSightsStore();
+// const filterOfName = ref('');
+
+// const handleFilterSights = () => {
+//   return items.value = items.value.filter((el) => el.name.includes(filterOfName));
+// };
 </script>
 
 <style scoped>
-#img {
-  width: 100px;
-  height: 75px;
+.image {
+  width: 100%;
+  height: 138px;
+  display: block;
 }
 </style>
