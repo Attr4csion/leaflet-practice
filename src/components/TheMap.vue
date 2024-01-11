@@ -1,29 +1,23 @@
 <template>
-  <div @click="handleSetView()">Уфа</div>
-
   <div id="map"></div>
 </template>
 
 <script setup lang="ts">
 import leaflet from 'leaflet';
-import { onMounted, watchEffect } from 'vue';
-import { useGeolocation } from '@vueuse/core';
-
-import { userMarker, nearbyMarker } from '../Map';
-
-const { coords } = useGeolocation();
+import { onMounted } from 'vue';
+// import { useGeolocation } from '@vueuse/core';
+import {  nearbyMarkers } from '../Map';
 
 let map: leaflet.Map;
-let userGeoMarker: leaflet.Marker;
+// let userGeoMarker: leaflet.Marker;
 
 onMounted(() => {
-  console.log('lol');
-  console.log(userMarker.value.latitude, userMarker.value.longitude);
-  console.log(coords);
+  let a = localStorage.getItem('coords');
+  let coord = JSON.parse(a);
 
-  map = leaflet
-    .map('map')
-    .setView([userMarker.value.latitude, userMarker.value.longitude], 13);
+  map = leaflet.map('map').setView([coord.latitude, coord.longitude], 13);
+
+  leaflet.marker([coord.latitude, coord.longitude]).addTo(map).bindPopup('lol');
 
   leaflet
     .tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -33,7 +27,7 @@ onMounted(() => {
     })
     .addTo(map);
 
-  nearbyMarker.value.forEach(({ latitude, longitude }) => {
+  nearbyMarkers.value.forEach(({ latitude, longitude }) => {
     leaflet
       .marker([latitude, longitude])
       .addTo(map)
@@ -49,58 +43,47 @@ onMounted(() => {
 
     leaflet
       .marker([latitude, longitude])
-      .removeFrom(map)
+      .addTo(map)
       .bindPopup(
         `Saved Marker at (<strong>${latitude.toFixed(2)},${longitude.toFixed(
           2
         )}</strong>)`
       );
 
-    nearbyMarker.value.push({ latitude, longitude });
+    nearbyMarkers.value.push({ latitude, longitude });
   });
 });
 
-watchEffect(() => {
-  if (
-    coords.value.latitude !== Number.POSITIVE_INFINITY &&
-    coords.value.longitude !== Number.POSITIVE_INFINITY
-  ) {
-    userMarker.value.latitude = coords.value.latitude;
-    userMarker.value.longitude = coords.value.longitude;
+// watchEffect(() => {
+//   if (
+//     coords?.latitude !== Number.POSITIVE_INFINITY &&
+//     coords?.longitude !== Number.POSITIVE_INFINITY
+//   ) {
+//     userMarker.value.latitude = coords?.latitude;
+//     userMarker.value.longitude = coords?.longitude;
 
-    if (userGeoMarker) {
-      map.removeLayer(userGeoMarker);
-    }
+//     if (userGeoMarker) {
+//       map.removeLayer(userGeoMarker);
+//     }
 
-    userGeoMarker = leaflet
-      .marker([userMarker.value.latitude, userMarker.value.longitude])
-      .addTo(map)
-      .bindPopup('User Marker');
+//     userGeoMarker = leaflet
+//       .marker([userMarker.value.latitude, userMarker.value.longitude])
+//       .addTo(map)
+//       .bindPopup('User Marker');
 
-    map.setView([userMarker.value.latitude, userMarker.value.longitude], 13);
+//     map.setView([userMarker.value.latitude, userMarker.value.longitude], 13);
 
-    const el = userGeoMarker.getElement();
-    if (el) {
-      el.style.filter = 'hue-rotate(120deg)';
-    }
-  }
-});
-
-const handleSetView = () => {
-  map.setView([53.02, 57.03], 13);
-
-  leaflet
-    .marker([53.02, 57.03])
-    .addTo(map)
-    .bindPopup(`Saved Marker at (<strong>${53.02},${57.03}</strong>)`);
-
-  nearbyMarker.value.push({ longitude: 53.02, latitude: 57.03 });
-};
+//     const el = userGeoMarker.getElement();
+//     if (el) {
+//       el.style.filter = 'hue-rotate(120deg)';
+//     }
+//   }
+// });
 </script>
 
 <style scoped>
 #map {
-  width: 500px;
-  height: 500px;
+  width: 600px;
+  height: 600px;
 }
 </style>
