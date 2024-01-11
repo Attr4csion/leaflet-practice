@@ -10,4 +10,4 @@ export const userMarker = useLocalStorage<Marker>('USER_MARKER', {
   latitude: 0
 })
 
-export const nearbyMarker = useLocalStorage<Marker[]>('NEARBY_MARKERS', [])
+export const nearbyMarkers = useLocalStorage<Marker[]>('NEARBY_MARKERS', [])

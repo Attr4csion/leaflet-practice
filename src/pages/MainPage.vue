@@ -1,25 +1,41 @@
 <template>
-  <!-- <div class="flex flex-col h-screen max-h-screen">
-    <div class="flex justify-between relative px-4 pt-8 pb-32"></div>
-
-    <div class="w-full max-w-screen-sm">
-      <h1 class="text-center text-3xl pb-4">ID address tracker</h1>
-      <div class="flex">
-        <input
-          class="flex-1 py-3 px-2 rounded-tl-md rounded-bl-md focus:outline-none"
-          type="text"
-          placeholder="Search for IP"
-        />
+  <div class="flex gap-10 m-auto w-[1400px]">
+    <el-scrollbar height="900px">
+      <div class="flex flex-wrap gap-10 w-90">
+        <el-card
+          v-for="s in sight"
+          :key="s.id"
+          class="w-[250px] h-[300px]"
+          @click="setCoords(s)"
+        >
+          <img
+            :src="s.image"
+            class="h-[138px]"
+          />
+          <p>{{ s.name }}</p>
+        </el-card>
       </div>
-    </div>
-  </div> -->
-  <div>
-    <TheMap></TheMap>
+    </el-scrollbar>
   </div>
 </template>
 
 <script setup lang="ts">
-import TheMap from '../components/TheMap.vue'
+import sight from '@/assets/sight.json';
+import router from '@/router';
+import { useSightsStore } from '@/sights-store';
+
+const setCoords = (s) => {
+  let c = JSON.stringify(s.coords);
+  localStorage.setItem('coords', c);
+  store.coords = s.coords;
+  router.push(`/sights/${s.id}`);
+};
+const store = useSightsStore();
 </script>
 
-<style scoped></style>
+<style scoped>
+#img {
+  width: 100px;
+  height: 75px;
+}
+</style>

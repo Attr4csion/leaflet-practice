@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-
+import SightsDetail from './components/SightsDetail.vue'
 import MainPage from '@/pages/MainPage.vue'
 
 const routes = [
@@ -9,7 +9,12 @@ const routes = [
     meta: {
       title: 'TestPage',
     },
+
   },
+  {
+    path:'/sights/:id',
+    component: SightsDetail
+  }
 ]
 
 const router = createRouter({
